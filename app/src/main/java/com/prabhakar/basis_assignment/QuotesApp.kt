@@ -1,6 +1,8 @@
 package com.prabhakar.basis_assignment
 
 import android.app.Application
+import dagger.hilt.android.AndroidEntryPoint
 
-class QuotesApp: Application() {
+@AndroidEntryPoint
+class QuotesApp : Application() {
 }
