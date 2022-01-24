@@ -1,8 +1,10 @@
 package com.prabhakar.basis_assignment.view
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         viewModel = ViewModelProvider(this).get(QuotesViewModel::class.java)
+//        starting loading animation
+        loading.startShimmerAnimation()
         buildList()
         setRecyclerView()
 
@@ -36,6 +40,9 @@ class MainActivity : AppCompatActivity() {
             it?.run {
                 when (this) {
                     is QuotesAppModel.OnSuccess -> {
+                        loading.stopShimmerAnimation()
+                        loading.isVisible=false
+                        recyclerview.visibility= View.VISIBLE
                         quotesList= this.responseModel.data as MutableList<ResponseModel>
                         quotesList.addAll(mutableListOf(this.responseModel))
                         setRecyclerView()
@@ -53,8 +60,7 @@ class MainActivity : AppCompatActivity() {
         })
         viewModel.getAllQuotes()
     }
-
-
+    
     //    Setting the RecyclerView
     private fun setRecyclerView() {
         quotesAdapter = QuotesAdapter(quotesList)
